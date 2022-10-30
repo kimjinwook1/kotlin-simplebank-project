@@ -1,0 +1,29 @@
+server:
+  port: 8091
+
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:mysql:latest:///test
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    open-in-view: false
+
+  redis:
+    host: localhost
+    port: 6379
+
+jwt:
+  secret: 7b071106b0167f7511b85f95f002e75fdd7167c2ba75adfd144d3b2328f10776f750bb096e52692bd8aaa9e813bab528bb2fe014adf396e73288f3a151bff6e1
+  accessToken-validity-in-seconds: 900000      # 15분 1000(ms) * 60(s) * 15(m)
+  refreshToken-validity-in-seconds: 7200000    # 2시간 1000(ms) * 60(s) * 60(m) * 2(h)
