@@ -16,14 +16,14 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Component
 import java.security.Key
 import java.util.*
-import java.util.stream.Collectors
+import kotlin.streams.toList
 
 
 @Component
 class TokenProvider(
-        @param:Value("\${jwt.secret}") private val secret: String,
-        @Value("\${jwt.accessToken-validity-in-seconds}") private val accessTokenValidityInSeconds: Long,
-        @Value("\${jwt.refreshToken-validity-in-seconds}") private val refreshTokenValidityInSeconds: Long
+    @param:Value("\${jwt.secret}") private val secret: String,
+    @Value("\${jwt.accessToken-validity-in-seconds}") private val accessTokenValidityInSeconds: Long,
+    @Value("\${jwt.refreshToken-validity-in-seconds}") private val refreshTokenValidityInSeconds: Long
 ) : InitializingBean {
 
     private val logger = LoggerFactory.getLogger(TokenProvider::class.java)
@@ -47,40 +47,41 @@ class TokenProvider(
 
     fun createAccessToken(memberId: Long?, authentication: Authentication, expirationTime: Date?): String {
 
-        val authorities = authentication.authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","))
+        val authorities = authentication.authorities
+            .map { GrantedAuthority::getAuthority }
+            .toList().joinToString { "," }
 
         return Jwts.builder()
-                .setExpiration(expirationTime) // 토큰 만료 시간
-                .claim("memberId", memberId.toString()) // 회원 아이디
-                .claim(AUTHORITIES_KEY, authorities) // 유저 role
-                .setIssuedAt(Date()) // 토큰 발급 시간
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact()
+            .setExpiration(expirationTime) // 토큰 만료 시간
+            .claim("memberId", memberId.toString()) // 회원 아이디
+            .claim(AUTHORITIES_KEY, authorities) // 유저 role
+            .setIssuedAt(Date()) // 토큰 발급 시간
+            .signWith(key, SignatureAlgorithm.HS512)
+            .compact()
     }
 
     fun createRefreshToken(expirationTIme: Date?): String {
 
         return Jwts.builder()
-                .setExpiration(expirationTIme) // 토큰 만료 시간
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact()
+            .setExpiration(expirationTIme) // 토큰 만료 시간
+            .signWith(key, SignatureAlgorithm.HS512)
+            .compact()
     }
 
     fun getAuthentication(token: String?): Authentication {
 
         val claims = Jwts.parserBuilder().setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .body
+            .build()
+            .parseClaimsJws(token)
+            .body
 
-        val authorities: Collection<GrantedAuthority> = Arrays.stream(claims[AUTHORITIES_KEY]
+        val authorities: Collection<GrantedAuthority> =
+            Arrays.stream(claims[AUTHORITIES_KEY]
                 .toString()
                 .split(",".toRegex())
                 .dropLastWhile { it.isEmpty() }.toTypedArray())
                 .map { role: String? -> SimpleGrantedAuthority(role) }
-                .collect(Collectors.toList())
+                .toList()
 
         // TODO CustomUserDetails 조회 후 principal 대신 반환
         val principal = User(claims.subject, "", authorities)
@@ -100,8 +101,8 @@ class TokenProvider(
 
         try {
             Jwts.parserBuilder().setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
+                .build()
+                .parseClaimsJws(token)
             return true
         } catch (e: SecurityException) {
             logger.info("잘못된 JWT 서명입니다.")
