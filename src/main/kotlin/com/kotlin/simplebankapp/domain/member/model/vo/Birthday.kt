@@ -7,18 +7,14 @@ import javax.persistence.Embeddable
 
 @Embeddable
 class Birthday(
-        @JsonValue
-        @Column(name = "birth")
-        val value: LocalDate
+    @JsonValue
+    @Column(name = "birth")
+    val value: LocalDate
 ) {
 
-    fun validateExceedDate(birth: LocalDate): Boolean {
-        return this.value > LocalDate.now()
-    }
+    fun validateExceedDate(birth: LocalDate) = birth > LocalDate.now()
 
-    fun getAge(): Int {
-        return LocalDate.now().year - value.year
-    }
+    fun getAge() = LocalDate.now().year - value.year
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

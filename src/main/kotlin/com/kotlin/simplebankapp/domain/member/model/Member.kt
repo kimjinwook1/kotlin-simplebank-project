@@ -57,12 +57,12 @@ class Member(
     fun matchPassword(rawPassword: String, encoder: PasswordEncoder): Boolean =
         encoder.matches(rawPassword, this.password)
 
-    fun changePassword(password: String, encoder: PasswordEncoder) : Member{
+    fun changePassword(password: String, encoder: PasswordEncoder): Member {
         this.password = encode(encoder, password)
-        return this;
+        return this
     }
 
-    fun validateExceedNow(birth: LocalDate): Boolean = this.birth.validateExceedDate(birth)
+    fun validateExceedNow(birth: LocalDate) = this.birth.validateExceedDate(birth)
 
     fun getAge(): Int = this.birth.getAge()
 

@@ -7,21 +7,28 @@ import com.kotlin.simplebankapp.domain.member.model.vo.RoleType
 import com.kotlin.simplebankapp.domain.member.model.vo.UserEmail
 import java.time.LocalDate
 
-class GivenMember {
-    companion object {
-        fun toMember(): Member {
-            return Member(
-                "진욱",
-                "jinwook",
-                Birthday(LocalDate.of(1993, 6, 28)),
-                UserEmail("jinwook628@gmail.com"),
-                ProfileImage("profileImage"),
-                "01031644306",
-                RoleType.USER,
-                false,
-                "1234",
-                1L
-            )
-        }
+object GivenMember {
+    var name = "진욱"
+    var nickname = "jinwook"
+    var birthday = Birthday(LocalDate.of(1993, 6, 28))
+    var userEmail = UserEmail("jinwook628@gmail.com")
+    var profileImage = ProfileImage("profileImage")
+    var phoneNumber = "01031644306"
+    var password = "1234"
+    var id = 1L
+
+    fun toMember(): Member {
+        return Member(
+            name,
+            nickname,
+            birthday,
+            userEmail,
+            profileImage,
+            phoneNumber,
+            RoleType.USER,
+            false,
+            password,
+            id
+        )
     }
 }
