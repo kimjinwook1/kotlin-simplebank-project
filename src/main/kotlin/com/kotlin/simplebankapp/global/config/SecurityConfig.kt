@@ -12,6 +12,8 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.filter.CorsFilter
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -19,7 +21,8 @@ class SecurityConfig(
     private val tokenProvider: TokenProvider,
     private val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint,
     private val jwtAccessDeniedHandler: JwtAccessDeniedHandler,
-    private val customUserDetailsService: CustomUserDetailsService
+    private val customUserDetailsService: CustomUserDetailsService,
+    private val corsFilter: CorsFilter,
 ) {
 
     @Bean
@@ -32,11 +35,10 @@ class SecurityConfig(
             .accessDeniedHandler(jwtAccessDeniedHandler)
 
             .and()
-            .headers()
-            .frameOptions()
-            .sameOrigin()
+            .headers().frameOptions().disable()
 
             .and()
+            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter::class.java)
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
@@ -51,6 +53,7 @@ class SecurityConfig(
             .and()
             .userDetailsService(customUserDetailsService)
             .apply(JwtSecurityConfig(tokenProvider))
+
         return httpSecurity.build()
 
     }
@@ -68,4 +71,7 @@ class SecurityConfig(
 
     @Bean
     fun passwordEncoder(): PasswordEncoder? = BCryptPasswordEncoder()
+
+    @Bean
+    fun customAuthenticationProvider() = CustomAuthenticationProvider()
 }

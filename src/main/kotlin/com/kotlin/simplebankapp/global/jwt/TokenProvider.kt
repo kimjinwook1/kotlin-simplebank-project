@@ -36,7 +36,7 @@ class TokenProvider(
         key = Keys.hmacShaKeyFor(keyBytes)
     }
 
-    fun createJwtTokenDto(memberId: Long?, authentication: Authentication): JwtTokenDto? {
+    fun createJwtTokenDto(memberId: Long?, authentication: Authentication): JwtTokenDto {
 
         val accessTokenExpireTime = createAccessTokenExpireTime()
         val refreshTokenExpireTime = createRefreshTokenExpireTime()
