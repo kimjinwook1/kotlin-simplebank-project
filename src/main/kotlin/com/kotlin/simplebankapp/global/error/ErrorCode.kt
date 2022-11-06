@@ -7,5 +7,8 @@ enum class ErrorCode(val status: Int, val code: String, val message: String) {
     INTERNAL_SERVER_ERROR(500, "C005", "서버 내부 오류 입니다."),
 
     // Member
-    MEMBER_NOT_FOUND(400, "M001", "멤버를 찾을 수 없습니다.")
+    MEMBER_NOT_FOUND(400, "M001", "멤버를 찾을 수 없습니다."),
+
+    //Bithday
+    EXCEED_BIRTHDAY(400, "B001", "생일이 현재 날짜를 초과하였습니다.")
 }

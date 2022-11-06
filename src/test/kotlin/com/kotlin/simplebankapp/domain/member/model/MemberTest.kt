@@ -47,7 +47,7 @@ internal class MemberTest {
         member.delete()
 
         // then
-        assertThat(member.deleted).isTrue
+        assertThat(member.isDeleted).isTrue
     }
 
     @Test
@@ -95,21 +95,6 @@ internal class MemberTest {
         assertThat(rawPassword).isNotEqualTo(member.password)
     }
 
-    @Test
-    @DisplayName("생일 검증이 정상 동작한다.")
-    fun validateExceedNow() {
-        // given
-        val member = GivenMember.toMember()
-        val birthDay = member.birth.value
-
-        // when
-        val isExceedNow = member.validateExceedNow(birthDay)
-
-        // then
-        assertThat(isExceedNow).isFalse
-    }
-
-    @Test
     @DisplayName("멤버의 나이 조회가 정상 동작한다.")
     fun getAge() {
         // given
@@ -125,7 +110,7 @@ internal class MemberTest {
 
     @Test
     @DisplayName("멤버의 RolType 검증")
-    fun memberRoleType(){
+    fun memberRoleType() {
         //given
         val memberRole = GivenMember.toMember().role
 
@@ -146,9 +131,7 @@ internal class MemberTest {
             ProfileImage("profileImage"),
             "01031644306",
             RoleType.USER,
-            false,
-            "1234",
-            1L
+            "1234"
         )
 
         //when

@@ -29,14 +29,15 @@ class Member(
     @Enumerated(EnumType.STRING)
     var role: RoleType,
 
-    var deleted: Boolean,
-
     var password: String,
+
+) {
+
+    var isDeleted = false
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null
-) {
+    val id: Long = 0
 
     fun update(name: String, nickname: String, profileImage: ProfileImage, birth: Birthday) {
         this.name = name
@@ -46,7 +47,7 @@ class Member(
     }
 
     fun delete() {
-        this.deleted = true
+        this.isDeleted = true
     }
 
     fun encodePassword(encoder: PasswordEncoder): Member {
@@ -62,11 +63,32 @@ class Member(
         return this
     }
 
-    fun validateExceedNow(birth: LocalDate) = this.birth.validateExceedDate(birth)
-
     fun getAge(): Int = this.birth.getAge()
 
     fun encode(encoder: PasswordEncoder, password: String): String = encoder.encode(password)
+
+    companion object {
+        fun fixture(
+            name: String,
+            nickname: String,
+            birth: LocalDate,
+            email: String,
+            profileImage: String,
+            phoneNumber: String,
+            password: String,
+        ): Member {
+            return Member(
+                name = name,
+                nickname = nickname,
+                birth = Birthday.fixture(birth),
+                email = UserEmail(email),
+                profileImage = ProfileImage(profileImage),
+                phoneNumber = phoneNumber,
+                password = password,
+                role = RoleType.USER
+            )
+        }
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -80,7 +102,7 @@ class Member(
     }
 
     override fun hashCode(): Int {
-        return id?.hashCode() ?: 0
+        return id.hashCode()
     }
 
 }
