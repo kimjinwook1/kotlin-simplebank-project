@@ -1,7 +1,8 @@
 package com.kotlin.simplebankapp.domain.member.model.vo
 
 import com.fasterxml.jackson.annotation.JsonValue
-import com.kotlin.simplebankapp.global.exceedBirthday
+import com.kotlin.simplebankapp.global.error.ErrorCode
+import com.kotlin.simplebankapp.global.utils.fail
 import java.time.LocalDate
 import javax.persistence.Column
 import javax.persistence.Embeddable
@@ -22,7 +23,7 @@ class Birthday(
 
         private fun validateExceedDate(birth: LocalDate): Birthday {
             if (birth > LocalDate.now()) {
-                exceedBirthday()
+                fail(ErrorCode.EXCEED_BIRTHDAY)
             }
             return Birthday(birth)
         }

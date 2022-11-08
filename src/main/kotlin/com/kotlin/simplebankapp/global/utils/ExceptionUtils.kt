@@ -1,13 +1,12 @@
-package com.kotlin.simplebankapp.global
+package com.kotlin.simplebankapp.global.utils
 
-import com.kotlin.simplebankapp.global.error.ExceedBirthday
-import com.kotlin.simplebankapp.global.error.MemberNotFoundException
+import com.kotlin.simplebankapp.global.error.ErrorCode
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.findByIdOrNull
 
-fun memberNotFound(): Nothing = throw MemberNotFoundException()
+fun memberNotFound(): Nothing = throw RuntimeException(ErrorCode.MEMBER_NOT_FOUND.message)
 
-fun exceedBirthday(): Nothing = throw ExceedBirthday()
+fun fail(error: ErrorCode): Nothing = throw RuntimeException(error.message)
 
 fun <T, ID> CrudRepository<T, ID>.findByIdOrThrow(id: ID): T {
     return this.findByIdOrNull(id) ?: memberNotFound()

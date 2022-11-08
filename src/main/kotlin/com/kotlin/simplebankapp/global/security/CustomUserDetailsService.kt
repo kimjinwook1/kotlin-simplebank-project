@@ -2,7 +2,7 @@ package com.kotlin.simplebankapp.global.security
 
 import com.kotlin.simplebankapp.domain.member.model.MemberRepository
 import com.kotlin.simplebankapp.global.common.RedisPolicy
-import com.kotlin.simplebankapp.global.memberNotFound
+import com.kotlin.simplebankapp.global.utils.memberNotFound
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service

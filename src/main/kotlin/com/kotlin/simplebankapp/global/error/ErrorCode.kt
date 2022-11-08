@@ -9,6 +9,10 @@ enum class ErrorCode(val status: Int, val code: String, val message: String) {
     // Member
     MEMBER_NOT_FOUND(400, "M001", "멤버를 찾을 수 없습니다."),
 
-    //Bithday
-    EXCEED_BIRTHDAY(400, "B001", "생일이 현재 날짜를 초과하였습니다.")
+    // Bithday
+    EXCEED_BIRTHDAY(400, "B001", "생일이 현재 날짜를 초과하였습니다."),
+
+    //
+    DUPLICATE_NICKNAME(400, "A001", "중복된 닉네임이 존재합니다."),
+    DUPLICATE_EMAIL(400, "A002", "중복된 이메일이 존재합니다."),
 }

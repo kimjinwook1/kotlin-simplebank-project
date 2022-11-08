@@ -2,7 +2,6 @@ package com.kotlin.simplebankapp.domain.member.model.vo
 
 import com.kotlin.simplebankapp.domain.member.util.GivenMember
 import com.kotlin.simplebankapp.global.error.ErrorCode
-import com.kotlin.simplebankapp.global.error.ExceedBirthday
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -18,7 +17,7 @@ internal class BirthdayTest {
         val exceedDate = LocalDate.now().plusDays(1)
 
         // then
-        assertThrows<ExceedBirthday> { Birthday.fixture(exceedDate) }
+        assertThrows<RuntimeException> { Birthday.fixture(exceedDate) }
             .apply {
                 assertThat(message).isEqualTo(ErrorCode.EXCEED_BIRTHDAY.message)
             }
