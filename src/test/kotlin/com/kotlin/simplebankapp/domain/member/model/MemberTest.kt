@@ -25,10 +25,10 @@ internal class MemberTest {
         val updateName = "updateName"
         val updateNickname = "updateNickname"
         val updateProfile = ProfileImage("updateProfile")
-        val updateBirth = Birthday(LocalDate.of(2000, 6, 28))
+        val updateBirth = Birthday.fixture(LocalDate.of(2000, 6, 28))
 
         // when
-        member.update(updateName, updateNickname, updateProfile, updateBirth)
+        member.update(updateName, updateNickname, updateProfile.value, updateBirth.value)
 
         // then
         assertThat(member.name).isEqualTo(updateName)

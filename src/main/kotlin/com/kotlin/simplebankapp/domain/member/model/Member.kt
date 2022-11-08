@@ -39,11 +39,11 @@ class Member(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
 
-    fun update(name: String, nickname: String, profileImage: ProfileImage, birth: Birthday) {
+    fun update(name: String, nickname: String, profileImage: String, birth: LocalDate) {
         this.name = name
         this.nickname = nickname
-        this.profileImage = profileImage
-        this.birth = birth
+        this.profileImage = ProfileImage(profileImage)
+        this.birth = Birthday.fixture(birth)
     }
 
     fun delete() {
@@ -66,6 +66,13 @@ class Member(
     fun getAge(): Int = this.birth.getAge()
 
     fun encode(encoder: PasswordEncoder, password: String): String = encoder.encode(password)
+
+    fun isNotMatchedNickname(nickname: String): Boolean {
+        if (this.nickname != nickname) {
+            return true
+        }
+        return false
+    }
 
     companion object {
         fun fixture(
