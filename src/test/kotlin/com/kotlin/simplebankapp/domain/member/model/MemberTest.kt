@@ -143,4 +143,17 @@ internal class MemberTest {
 
     }
 
+    @Test
+    @DisplayName("닉네임 일치 검사가 정상적으로 동작한다.")
+    fun checkNickname() {
+        //given
+        val member = GivenMember.toMember()
+
+        //when
+        val isMatched = member.isMatchedNickname("jinwook")
+        //then
+
+        assertThat(isMatched).isTrue
+    }
+
 }

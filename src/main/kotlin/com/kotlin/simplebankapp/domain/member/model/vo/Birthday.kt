@@ -22,9 +22,7 @@ class Birthday(
         }
 
         private fun validateExceedDate(birth: LocalDate): Birthday {
-            if (birth > LocalDate.now()) {
-                fail(ErrorCode.EXCEED_BIRTHDAY)
-            }
+            check(birth <= LocalDate.now()) { fail(ErrorCode.EXCEED_BIRTHDAY) }
             return Birthday(birth)
         }
     }

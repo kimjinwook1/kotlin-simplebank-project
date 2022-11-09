@@ -67,8 +67,8 @@ class Member(
 
     fun encode(encoder: PasswordEncoder, password: String): String = encoder.encode(password)
 
-    fun isNotMatchedNickname(nickname: String): Boolean {
-        if (this.nickname != nickname) {
+    fun isMatchedNickname(nickname: String): Boolean {
+        if (this.nickname == nickname) {
             return true
         }
         return false

@@ -35,9 +35,8 @@ class MemberService(
     fun update(memberUpdateRequest: MemberUpdateRequest, memberId: Long) {
         val findMember = getMember(memberId)
 
-        if (findMember.isNotMatchedNickname(memberUpdateRequest.nickname)) {
-            validateDuplicationNickname(memberUpdateRequest.nickname)
-        }
+        check(!findMember.isMatchedNickname(memberUpdateRequest.nickname))
+        { validateDuplicationNickname(memberUpdateRequest.nickname) }
 
         findMember.update(
             memberUpdateRequest.name,
@@ -58,15 +57,11 @@ class MemberService(
     }
 
     private fun validateDuplicationNickname(nickname: String) {
-        if (memberRepository.existsByNickname(nickname)) {
-            fail(ErrorCode.DUPLICATE_NICKNAME)
-        }
+        check(memberRepository.existsByNickname(nickname)) { fail(ErrorCode.DUPLICATE_NICKNAME) }
     }
 
     private fun validateDuplicationEmail(email: String) {
-        if (memberRepository.existsByEmail(UserEmail(email))) {
-            fail(ErrorCode.DUPLICATE_EMAIL)
-        }
+        check(memberRepository.existsByEmail(UserEmail(email))) { fail(ErrorCode.DUPLICATE_EMAIL) }
     }
 
 }
