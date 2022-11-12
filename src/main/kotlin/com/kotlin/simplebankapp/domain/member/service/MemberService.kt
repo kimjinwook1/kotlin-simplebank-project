@@ -57,11 +57,11 @@ class MemberService(
     }
 
     private fun validateDuplicationNickname(nickname: String) {
-        check(memberRepository.existsByNickname(nickname)) { fail(ErrorCode.DUPLICATE_NICKNAME) }
+        check(!memberRepository.existsByNickname(nickname)) { fail(ErrorCode.DUPLICATE_NICKNAME) }
     }
 
     private fun validateDuplicationEmail(email: String) {
-        check(memberRepository.existsByEmail(UserEmail(email))) { fail(ErrorCode.DUPLICATE_EMAIL) }
+        check(!memberRepository.existsByEmail(UserEmail(email))) { fail(ErrorCode.DUPLICATE_EMAIL) }
     }
 
 }
