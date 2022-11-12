@@ -3,32 +3,36 @@ package com.kotlin.simplebankapp.domain.member.dto
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.kotlin.simplebankapp.domain.member.model.Member
 import java.time.LocalDate
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
+import javax.validation.constraints.NotBlank
 
 data class MemberJoinRequest(
 
-    @NotNull(message = "필수 값입니다. - email")
+    @field:NotBlank(message = "필수 값입니다. - email")
+    @JsonProperty("email")
     val email: String,
 
-    @NotNull(message = "필수 값입니다. - password")
+    @field:NotBlank(message = "필수 값입니다. - password")
+    @JsonProperty("password")
     val password: String,
 
-    @NotNull(message = "필수 값입니다. - name")
+    @field:NotBlank(message = "필수 값입니다. - name")
+    @JsonProperty("name")
     val name: String,
 
-    @Valid
-    @NotNull(message = "필수 값입니다. - nickname")
+    @field:NotBlank(message = "필수 값입니다. - nickname")
+    @JsonProperty("nickname")
     val nickname: String,
 
-    @Valid
-    @NotNull(message = "필수 값입니다. - birth")
+    @field:NotBlank(message = "필수 값입니다. - LocalDate")
+    @JsonProperty("LocalDate")
     val birth: LocalDate,
 
+    @field:NotBlank(message = "필수 값입니다. - profile")
     @JsonProperty("profile")
     val profile: String,
 
-    @NotNull(message = "필수 값입니다. - phoneNumber")
+    @field:NotBlank(message = "필수 값입니다. - phoneNumber")
+    @JsonProperty("phoneNumber")
     val phoneNumber: String,
 ) {
 
