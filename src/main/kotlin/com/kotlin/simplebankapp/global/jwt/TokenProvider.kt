@@ -1,6 +1,7 @@
 package com.kotlin.simplebankapp.global.jwt
 
 import com.kotlin.simplebankapp.global.jwt.dto.JwtTokenDto
+import com.kotlin.simplebankapp.global.security.CustomUserDetailsService
 import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
@@ -12,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Component
 import java.security.Key
 import java.util.*
@@ -23,7 +23,8 @@ import kotlin.streams.toList
 class TokenProvider(
     @param:Value("\${jwt.secret}") private val secret: String,
     @Value("\${jwt.accessToken-validity-in-seconds}") private val accessTokenValidityInSeconds: Long,
-    @Value("\${jwt.refreshToken-validity-in-seconds}") private val refreshTokenValidityInSeconds: Long
+    @Value("\${jwt.refreshToken-validity-in-seconds}") private val refreshTokenValidityInSeconds: Long,
+    private val customUserDetailsService: CustomUserDetailsService
 ) : InitializingBean {
 
     private val logger = LoggerFactory.getLogger(TokenProvider::class.java)
@@ -35,7 +36,7 @@ class TokenProvider(
         key = Keys.hmacShaKeyFor(keyBytes)
     }
 
-    fun createJwtTokenDto(memberId: Long?, authentication: Authentication): JwtTokenDto? {
+    fun createJwtTokenDto(memberId: Long?, authentication: Authentication): JwtTokenDto {
 
         val accessTokenExpireTime = createAccessTokenExpireTime()
         val refreshTokenExpireTime = createRefreshTokenExpireTime()
@@ -45,7 +46,7 @@ class TokenProvider(
         return JwtTokenDto.fixture(accessToken, refreshToken)
     }
 
-    fun createAccessToken(memberId: Long?, authentication: Authentication, expirationTime: Date?): String {
+    private fun createAccessToken(memberId: Long?, authentication: Authentication, expirationTime: Date?): String {
 
         val authorities = authentication.authorities
             .map { GrantedAuthority::getAuthority }
@@ -60,7 +61,7 @@ class TokenProvider(
             .compact()
     }
 
-    fun createRefreshToken(expirationTIme: Date?): String {
+    private fun createRefreshToken(expirationTIme: Date?): String {
 
         return Jwts.builder()
             .setExpiration(expirationTIme) // 토큰 만료 시간
@@ -83,17 +84,18 @@ class TokenProvider(
                 .map { role: String? -> SimpleGrantedAuthority(role) }
                 .toList()
 
-        // TODO CustomUserDetails 조회 후 principal 대신 반환
-        val principal = User(claims.subject, "", authorities)
+        val memberId = claims["memberId"]
 
-        return UsernamePasswordAuthenticationToken(principal, token, authorities)
+        val userDetails = customUserDetailsService.loadUserByUsername(memberId = memberId.toString())
+
+        return UsernamePasswordAuthenticationToken(userDetails, "", authorities)
     }
 
-    fun createAccessTokenExpireTime(): Date {
+    private fun createAccessTokenExpireTime(): Date {
         return Date(System.currentTimeMillis() + accessTokenValidityInSeconds)
     }
 
-    fun createRefreshTokenExpireTime(): Date {
+    private fun createRefreshTokenExpireTime(): Date {
         return Date(System.currentTimeMillis() + refreshTokenValidityInSeconds)
     }
 

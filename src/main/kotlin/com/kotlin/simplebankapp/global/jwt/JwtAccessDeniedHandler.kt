@@ -13,9 +13,10 @@ class JwtAccessDeniedHandler : AccessDeniedHandler {
 
     @Throws(IOException::class, ServletException::class)
     override fun handle(
-            request: HttpServletRequest,
-            response: HttpServletResponse,
-            accessDeniedException: AccessDeniedException) {
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        accessDeniedException: AccessDeniedException
+    ) {
         response.sendError(HttpServletResponse.SC_FORBIDDEN)
     }
 }

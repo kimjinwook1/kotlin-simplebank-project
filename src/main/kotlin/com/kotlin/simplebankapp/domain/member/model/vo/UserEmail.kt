@@ -6,9 +6,9 @@ import javax.persistence.Embeddable
 
 @Embeddable
 class UserEmail(
-        @JsonValue
-        @Column(name = "email")
-        val value: String
+    @JsonValue
+    @Column(name = "email")
+    val value: String
 ) {
 
     fun getHost(): String {

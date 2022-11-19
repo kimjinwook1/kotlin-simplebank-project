@@ -6,9 +6,9 @@ import javax.persistence.Embeddable
 
 @Embeddable
 class ProfileImage(
-        @JsonValue
-        @Column(name = "profile_image_url")
-        val value: String
+    @JsonValue
+    @Column(name = "profile_image_url")
+    val value: String
 ) {
 
     fun validateImagePath(profileImageUrl: ProfileImage): Boolean {
